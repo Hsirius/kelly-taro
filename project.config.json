@@ -2,10 +2,10 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "kelly",
 	"description": "a miniprogram about sailei, kelly and music",
-	"appid": "touristappid",
+	"appid": "wxa1812e2faf7f4906",
 	"setting": {
 		"urlCheck": true,
-		"es6": false,
+		"es6": true,
 		"enhance": false,
 		"postcss": false,
 		"preloadBackgroundData": false,

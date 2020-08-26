@@ -1,0 +1,16 @@
+.header {
+  padding: 0 26px;
+  position: relative;
+  .search-inp {
+    margin: 0 auto;
+    padding: 10px 0 10px 76px;
+    border-radius: 20px;
+    font-size: 28px;
+    background: #f4f4f5;
+  }
+  .search-icon {
+    position: absolute;
+    left: 40px;
+    bottom: 17px;
+  }
+}
