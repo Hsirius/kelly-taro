@@ -4,8 +4,8 @@
 	"description": "a miniprogram about sailei, kelly and music",
 	"appid": "wxa1812e2faf7f4906",
 	"setting": {
-		"urlCheck": true,
-		"es6": true,
+		"urlCheck": false,
+		"es6": false,
 		"enhance": false,
 		"postcss": false,
 		"preloadBackgroundData": false,
