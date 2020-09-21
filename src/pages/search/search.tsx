@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { View, Input, Icon, Text } from "@tarojs/components";
 import { AtTabs, AtTabsPane } from "taro-ui";
 
-import { qqGetSong, qqGetSongUrl } from "../../../src/service";
+import playUrl from "../../store/playUrl";
+import { neteaseApiHost, qqGetSong, qqGetSongUrl } from "../../../src/service";
 
 import "./search.scss";
 
@@ -16,26 +17,34 @@ const Search = () => {
   const [current, setCurrent] = useState(0);
   const [qqsong, setQQSong] = useState([] as any[]);
   const [neteaseSong, setNeteaseSong] = useState([] as any[]);
-
+  // 处理input的值
   const handleInput = (e) => {
     setVal(e.target.value);
   };
+  // 处理qq返回结果
+  const handleQqResult = (d) => {
+    let result = d.data.replace(/^callback\(/, "");
+    result = JSON.parse(result.substr(0, result.length - 1)) as any[];
+    setQQSong([...result.data.song.list]);
+  };
+  // 处理网易返回结果
+  const handleNeteaseResult = (d) => {
+    setNeteaseSong(d.data.result.songs);
+  };
   const getSearchData = async () => {
     try {
-      Taro.request({
-        url: qqGetSong,
-        data: { w: val },
-      }).then((res) => {
-        let result = res.data.replace(/^callback\(/, "");
-        result = JSON.parse(result.substr(0, result.length - 1)) as any[];
-        setQQSong([...result.data.song.list]);
-      });
-      Taro.request({
-        url: "http://localhost:4000/search",
-        data: { keywords: val },
-      }).then((res) => {
-        console.log(res.data.result.songs);
-        setNeteaseSong(res.data.result.songs);
+      Promise.all([
+        Taro.request({
+          url: qqGetSong,
+          data: { w: val },
+        }),
+        Taro.request({
+          url: `${neteaseApiHost}/search`,
+          data: { keywords: val },
+        }),
+      ]).then((res) => {
+        handleQqResult(res[0]);
+        handleNeteaseResult(res[1]);
       });
     } catch (error) {
       Taro.showToast({
@@ -63,13 +72,17 @@ const Search = () => {
   const readyToPlayNetease = (item) => {
     try {
       Taro.request({
-        url: "http://localhost:4000/song/url",
+        url: `${neteaseApiHost}/song/url`,
         data: { id: item.id },
       }).then((res) => {
+        console.log(res);
+        console.log(item);
+
         const tempFilePath = res.data.data[0].url;
-        Taro.playVoice({
-          filePath: tempFilePath,
-          complete: function () {},
+        const info = Object.assign(item, { url: tempFilePath });
+        playUrl.resetSongInfo(info);
+        Taro.navigateTo({
+          url: "/pages/play/play",
         });
       });
     } catch (error) {

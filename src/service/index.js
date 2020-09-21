@@ -3,3 +3,5 @@ export const qqGetSong =
 
 export const qqGetSongUrl =
   "https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?tpl=yqq_song_detail&format=jsonp&callback=getOneSongInfoCallback";
+
+export const neteaseApiHost = "http://58.87.120.228:8081";
