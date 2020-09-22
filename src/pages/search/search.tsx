@@ -23,19 +23,23 @@ const Search = () => {
   };
   // 处理qq返回结果
   const handleQqResult = (d) => {
-    let result = d.data.replace(/^callback\(/, "");
-    result = JSON.parse(result.substr(0, result.length - 1)) as any[];
-    setQQSong([...result.data.song.list]);
+    // let result = d.data.replace(/^callback\(/, "");
+    // result = JSON.parse(result.substr(0, result.length - 1)) as any[];
+    // setQQSong([...result.data.song.list]);
+    return false;
   };
   // 处理网易返回结果
   const handleNeteaseResult = (d) => {
+    console.log(d);
+
     setNeteaseSong(d.data.result.songs);
   };
   const getSearchData = async () => {
     try {
       Promise.all([
         Taro.request({
-          url: qqGetSong,
+          // url: qqGetSong,
+          url: `${neteaseApiHost}/search`,
           data: { w: val },
         }),
         Taro.request({
@@ -43,7 +47,7 @@ const Search = () => {
           data: { keywords: val },
         }),
       ]).then((res) => {
-        handleQqResult(res[0]);
+        // handleQqResult(res[0]);
         handleNeteaseResult(res[1]);
       });
     } catch (error) {
@@ -56,12 +60,12 @@ const Search = () => {
   const readyToPlay = (item) => {
     const timeStamp = String(new Date().getTime()).substr(-9);
     try {
-      Taro.request({
-        url: qqGetSongUrl,
-        data: { songid: item.songmid },
-      }).then((res) => {
-        console.log(res.data);
-      });
+      // Taro.request({
+      //   url: qqGetSongUrl,
+      //   data: { songid: item.songmid },
+      // }).then((res) => {
+      //   console.log(res.data);
+      // });
     } catch (error) {
       Taro.showToast({
         title: "载入远程数据错误",
