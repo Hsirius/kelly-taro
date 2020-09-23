@@ -41,7 +41,6 @@
     "@tarojs/runtime": "3.0.8",
     "@tarojs/taro": "3.0.8",
     "alias": "^0.0.5",
-    "fastclick": "^1.0.6",
     "mobx": "^4.8.0",
     "mobx-react": "^6.1.4",
     "react": "^16.10.0",

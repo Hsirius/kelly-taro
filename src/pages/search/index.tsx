@@ -6,7 +6,8 @@ import { AtTabs, AtTabsPane } from "taro-ui";
 import playUrl from "../../store/playUrl";
 import { neteaseApiHost, qqGetSong, qqGetSongUrl } from "../../../src/service";
 
-import "./search.scss";
+import "./index.scss";
+import { getSingerName } from "../../utils";
 
 interface Search {
   val: string;
@@ -70,26 +71,9 @@ const Search = () => {
   };
 
   const readyToPlayNetease = (item) => {
-    try {
-      Taro.request({
-        url: `${neteaseApiHost}/song/url`,
-        data: { id: item.id },
-      }).then((res) => {
-        console.log(res);
-        console.log(item);
-
-        const tempFilePath = res.data.data[0].url;
-        const info = Object.assign(item, { url: tempFilePath });
-        playUrl.resetSongInfo(info);
-        Taro.navigateTo({
-          url: "/pages/play/play",
-        });
-      });
-    } catch (error) {
-      Taro.showToast({
-        title: "载入远程数据错误",
-      });
-    }
+    Taro.navigateTo({
+      url: `/pages/play/index?id=${item.id}`,
+    });
   };
 
   useEffect(() => {
@@ -148,12 +132,7 @@ const Search = () => {
               >
                 <View>{item.songname}</View>
                 <View className="info">
-                  {item.singer.map((artist, index) => (
-                    <Text key={artist.id}>
-                      <Text>{artist.name}</Text>
-                      {index < item.singer.length - 1 && <Text>/</Text>}
-                    </Text>
-                  ))}
+                  <Text> {getSingerName(item.singer)} </Text>
                   <Text> - </Text>
                   <Text decode>{item.albumname}</Text>
                 </View>

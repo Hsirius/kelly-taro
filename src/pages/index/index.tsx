@@ -7,7 +7,7 @@ import "./index.scss";
 const Index = () => {
   const toSearch = () => {
     Taro.navigateTo({
-      url: "/pages/search/search",
+      url: "/pages/search/index",
     });
   };
 
