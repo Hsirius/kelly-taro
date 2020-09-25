@@ -1,7 +1,7 @@
 import React from "react";
 import Taro, { getCurrentInstance } from "@tarojs/taro";
 import { View, Image, Text } from "@tarojs/components";
-import { AtSlider, AtMessage } from "taro-ui";
+import { AtSlider, AtMessage, AtIcon } from "taro-ui";
 
 import { neteaseApiHost } from "../../../src/service";
 import { getSingerName } from "../../utils";
@@ -12,17 +12,17 @@ const playMode = {
   1: {
     type: "repeat-play",
     name: "列表循环",
-    icon: <View className="at-icon at-icon-repeat-play"></View>,
+    icon: <AtIcon value="repeat-play" size="24"></AtIcon>,
   },
   2: {
     type: "shuffle-play",
     name: "随机播放",
-    icon: <View className="at-icon at-icon-shuffle-play"></View>,
+    icon: <AtIcon value="shuffle-play" size="24"></AtIcon>,
   },
   3: {
     type: "reload",
     name: "单曲循环",
-    icon: <View className="at-icon at-icon-reload"></View>,
+    icon: <AtIcon value="reload" size="24"></AtIcon>,
   },
 };
 
@@ -36,7 +36,6 @@ type SongType = {
 };
 
 type StateType = {
-  musicId: string;
   isPlay: boolean;
   isCollect: boolean;
   timeLength: number;
@@ -57,7 +56,6 @@ class Play extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      musicId: "",
       isPlay: true,
       isCollect: false,
       timeLength: 0,
@@ -70,7 +68,7 @@ class Play extends React.Component {
       currentPlayMode: 1,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     const id = this.current.router?.params.id || "";
     if (id) {
       this.initPlayer(id);
@@ -185,7 +183,7 @@ class Play extends React.Component {
   prev() {
     const songList = Taro.getStorageSync("songList");
     const songId = Taro.getStorageSync("songId");
-    for (let i in songList) {
+    for (let i = 0; i < songList.length; i++) {
       if (songList[i].id == songId) {
         if (i === 0) {
           var num = Number(songList.length);
@@ -202,7 +200,7 @@ class Play extends React.Component {
   next() {
     const songList = Taro.getStorageSync("songList");
     const songId = Taro.getStorageSync("songId");
-    for (let i in songList) {
+    for (let i = 0; i < songList.length; i++) {
       if (songList[i].id == songId) {
         var num = Number(songList.length) - 1;
         if (i === num) {
@@ -246,21 +244,24 @@ class Play extends React.Component {
   format(time) {
     let minutes = (time / 60) | 0; // |是向下取正
     let seconds = time % 60 | 0;
+    let temp = JSON.stringify(seconds);
     if (seconds < 10) {
-      seconds = "0" + seconds;
+      temp = "0" + seconds;
     }
-    return minutes + ":" + seconds;
+    return minutes + ":" + temp;
   }
   conversion(time) {
     let minutes = (time / 60) | 0; // |是向下取正
     let seconds = time % 60 | 0;
+    let tempM = JSON.stringify(minutes);
+    let tempS = JSON.stringify(seconds);
     if (minutes < 10) {
-      minutes = "0" + minutes;
+      tempM = "0" + minutes;
     }
     if (seconds < 10) {
-      seconds = "0" + seconds;
+      tempS = "0" + seconds;
     }
-    return minutes + ":" + seconds;
+    return tempM + ":" + tempS;
   }
   sliderChange(e) {
     this.state.audioCtx.seek(e);
@@ -284,7 +285,6 @@ class Play extends React.Component {
   }
   render() {
     const {
-      musicId,
       isPlay,
       isCollect,
       timeLength,
@@ -314,7 +314,7 @@ class Play extends React.Component {
               ? this.getPlayLyrics(playTime)
               : "玩命加载中..."}
           </View>
-          <View className="music-play">
+          <View>
             <View className="slider">
               <Text className="start-time">{this.format(playTime)}</Text>
               <AtSlider
@@ -335,23 +335,23 @@ class Play extends React.Component {
                 {playMode[currentPlayMode].icon}
               </View>
               <View className="prev" onClick={() => this.prev()}>
-                <View className="at-icon at-icon-prev"></View>
+                <AtIcon value="chevron-left" size="24"></AtIcon>
               </View>
               <View className="play-btn" onClick={() => this.play()}>
                 {isPlay ? (
-                  <View className="at-icon at-icon-pause"></View>
+                  <AtIcon value="pause" size="24"></AtIcon>
                 ) : (
-                  <View className="at-icon at-icon-play"></View>
+                  <AtIcon value="play" size="24"></AtIcon>
                 )}
               </View>
               <View className="next" onClick={() => this.next()}>
-                <View className="at-icon at-icon-next"></View>
+                <AtIcon value="chevron-right" size="24"></AtIcon>
               </View>
               <View className="heart" onClick={() => this.collection()}>
                 {isCollect ? (
-                  <View className="at-icon at-icon-heart-2"></View>
+                  <AtIcon value="heart-2" size="24"></AtIcon>
                 ) : (
-                  <View className="at-icon at-icon-heart"></View>
+                  <AtIcon value="heart" size="24"></AtIcon>
                 )}
               </View>
             </View>

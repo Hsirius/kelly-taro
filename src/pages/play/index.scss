@@ -1,6 +1,3 @@
-@import "~taro-ui/dist/style/components/toast.scss";
-@import "~taro-ui/dist/style/components/slider.scss";
-
 .play {
   position: relative;
   height: 100vh;
@@ -36,9 +33,6 @@
   position: relative;
   top: 50px;
   padding: 20px 0;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // white-space: nowrap;
 }
 .slider {
   position: relative;
@@ -61,28 +55,17 @@
   }
 }
 .play-button {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   position: relative;
   top: 240px;
+  width: 90%;
+  margin: 0 auto;
 }
-.type {
-  position: absolute;
-  left: 100px;
-}
-.prev {
-  position: absolute;
-  left: 220px;
-}
-.play-btn {
-  position: absolute;
-  left: 340px;
-}
-.next {
-  position: absolute;
-  left: 460px;
-}
-.heart {
-  position: absolute;
-  left: 580px;
+
+.opt {
+  font-size: 30px;
 }
 
 .rotate {
@@ -98,10 +81,4 @@
   100% {
     transform: rotate(360deg);
   }
-}
-.music-play {
-  position: absolute;
-  bottom: 160px;
-  width: 100%;
-  height: 200px;
 }

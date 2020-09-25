@@ -1,13 +1,12 @@
 import Taro from "@tarojs/taro";
 import React, { useState, useEffect } from "react";
 import { View, Input, Icon, Text } from "@tarojs/components";
-import { AtTabs, AtTabsPane } from "taro-ui";
+import { AtTabs, AtTabsPane, AtActivityIndicator } from "taro-ui";
 
-import playUrl from "../../store/playUrl";
+import { getSingerName } from "../../utils";
 import { neteaseApiHost, qqGetSong, qqGetSongUrl } from "../../../src/service";
 
 import "./index.scss";
-import { getSingerName } from "../../utils";
 
 interface Search {
   val: string;
@@ -18,6 +17,7 @@ const Search = () => {
   const [current, setCurrent] = useState(0);
   const [qqsong, setQQSong] = useState([] as any[]);
   const [neteaseSong, setNeteaseSong] = useState([] as any[]);
+  const [loading, setLoading] = useState(false);
   // 处理input的值
   const handleInput = (e) => {
     setVal(e.target.value);
@@ -34,6 +34,7 @@ const Search = () => {
   };
   const getSearchData = async () => {
     try {
+      setLoading(true);
       Promise.all([
         Taro.request({
           url: qqGetSong,
@@ -44,6 +45,7 @@ const Search = () => {
           data: { keywords: val },
         }),
       ]).then((res) => {
+        setLoading(false);
         handleQqResult(res[0]);
         handleNeteaseResult(res[1]);
       });
@@ -93,6 +95,11 @@ const Search = () => {
         />
         <Icon size="20" className="search-icon" type="search" />
       </View>
+      <AtActivityIndicator
+        mode="center"
+        isOpened={loading}
+        content="loading..."
+      ></AtActivityIndicator>
       <AtTabs
         current={current}
         scroll
